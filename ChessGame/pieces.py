@@ -1,9 +1,13 @@
+import pygame
+from pygame.locals import *
+
 class Piece:
     def __init__(self, player: bool, name:str):
         self.player = player
         self.name = name
         self.x = None
         self.y = None
+        self.icon = None
 
     def set_piece_position(self, x: int, y: int):
         self.x = x
@@ -21,8 +25,14 @@ class Piece:
     def get_player(self) -> bool:
         return self.player
     
-    def get_name(self) -> str:
-        return self.name + f'_{"B" if self.player else "W"}'
+    def get_icon_name(self) -> str:
+        return f"{'W' if self.player else 'B'}_{self.name}"
+    
+    def load_icon(self):
+        self.icon = pygame.image.load(f'icons/{self.get_icon_name()}.png')
+        
+    def get_icon(self) -> pygame.Surface:
+        return self.icon
     
 
 class Pawn(Piece):
@@ -36,6 +46,10 @@ class Pawn(Piece):
 
     def get_possible_attacks(self):
         return [(self.x + (1 if self.player else -1), self.y + 1), (self.x + (1 if self.player else -1), self.y - 1)]
+    
+    def set_piece_position(self, x, y):
+        super().set_piece_position(x, y)
+        self.has_moved = True
 
 
 class Knight(Piece):
@@ -58,6 +72,9 @@ class Rook(Piece):
     def get_possible_moves(self):
         moves = [(_x, _y) for _x in range(-self.board_length, self.board_length + 1) for _y in range(-self.board_length, self.board_length + 1) if _x == 0 or _y == 0]
         return [(self.x + _x, self.y + _y) for _x, _y in moves if 0 <= self.x + _x < self.board_length and 0 <= self.y + _y < self.board_length]
+    
+    def get_possible_attacks(self):
+        return self.get_possible_moves()
 
 
     
