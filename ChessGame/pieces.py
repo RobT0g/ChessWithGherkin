@@ -32,7 +32,7 @@ class Pawn(Piece):
 
     def get_possible_moves(self):
         moves = [1, 2] if not self.has_moved else [1]
-        return [(self.x + (1 if self.player else -1), self.y) for _ in moves]
+        return [(self.x + (v if self.player else -v), self.y) for v in moves]
 
     def get_possible_attacks(self):
         return [(self.x + (1 if self.player else -1), self.y + 1), (self.x + (1 if self.player else -1), self.y - 1)]
