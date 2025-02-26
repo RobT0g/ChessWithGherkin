@@ -5,13 +5,17 @@ from pieces import *
 pygame.init()  
 
 class BoardManager:
-    def __init__(self):
-        self.board = [[None for i in range(8)] for j in range(8)]
+    def __init__(self, board_length=8, board_width=8):
+        self.board_length = board_length
+        self.board_width = board_width
+        self.board = [[None for i in range(board_length)] for j in range(board_width)]
+
         self.tile_size = 75
         self.border_size = 15
-        self.screen_size = self.tile_size*8 + self.border_size*2 + 9*2
-        self.display = pygame.display.set_mode((self.screen_size, self.screen_size))
+        self.screen_size = [self.tile_size*size + self.border_size*2 + (size+1)*2 for size in [self.board_length, self.board_width]]
+        self.display = pygame.display.set_mode(self.screen_size)
         pygame.display.set_caption('Chess Game')
+        
         self.generate_board()
         self.player_turn = False
 
@@ -20,9 +24,9 @@ class BoardManager:
         self.highlighted_attacks = []
 
     def generate_board(self):
-        self.board_surface = pygame.Surface((self.tile_size*8+9*2, self.tile_size*8+9*2))
-        for i in range(8):
-            for j in range(8):
+        self.board_surface = pygame.Surface([size-2*self.border_size for size in self.screen_size])
+        for i in range(self.board_length):
+            for j in range(self.board_width):
                 color = (222, 184, 135) if (i+j)%2 == 0 else (139, 69, 19)
                 pygame.draw.rect(self.board_surface, color, (i*self.tile_size + (i+1)*2, j*self.tile_size + (j+1)*2, self.tile_size, self.tile_size))
 
@@ -54,8 +58,8 @@ class BoardManager:
                     self.board[i][j].y = j
 
     def draw_pieces(self):
-        for i in range(8):
-            for j in range(8):
+        for i in range(self.board_length):
+            for j in range(self.board_width):
                 piece = self.board[i][j]
                 if piece:
                     piece.load_icon()
@@ -68,7 +72,7 @@ class BoardManager:
         row = (y - self.border_size) // (self.tile_size + 2)
         print(f"Clicked on row: {row}, col: {col}")
 
-        if row < 0 or row >= 8 or col < 0 or col >= 8:
+        if row < 0 or row >= self.board_length or col < 0 or col >= self.board_width:
             return
 
         if (row, col) in self.highlighted_moves or (row, col) in self.highlighted_attacks:
@@ -115,7 +119,7 @@ class BoardManager:
         except: pass
 
         for move in moves:
-            if move[0] < 0 or move[0] >= 8 or move[1] < 0 or move[1] >= 8:
+            if move[0] < 0 or move[0] >= self.board_length or move[1] < 0 or move[1] >= self.board_width:
                 continue
 
             if self.board[move[0]][move[1]]:
@@ -124,7 +128,7 @@ class BoardManager:
             self.highlighted_moves.append(move)
             
         for attack in attacks:
-            if attack[0] < 0 or attack[0] >= 8 or attack[1] < 0 or attack[1] >= 8:
+            if attack[0] < 0 or attack[0] >= self.board_length or attack[1] < 0 or attack[1] >= self.board_width:
                 continue
 
             if not self.board[attack[0]][attack[1]]:
@@ -144,7 +148,7 @@ class BoardManager:
             x += move[0]
             y += move[1]
 
-            while 0 <= x < 8 and 0 <= y < 8:
+            while 0 <= x < self.board_length and 0 <= y < self.board_width:
                 if self.board[x][y] and self.board[x][y].player == piece.player:
                     break
 
@@ -158,7 +162,7 @@ class BoardManager:
     
     def display_board(self):
         self.display.blit(self.board_surface, (self.border_size, self.border_size))
-        pygame.draw.rect(self.display, (139, 69, 19), (0, 0, self.screen_size, self.screen_size), self.border_size)
+        pygame.draw.rect(self.display, (139, 69, 19), (0, 0, *self.screen_size), self.border_size)
 
         for move in self.highlighted_moves:
             pygame.draw.rect(self.display, (0, 255, 0, 100), (move[1]*self.tile_size + self.border_size + (move[1]+1)*2, move[0]*self.tile_size + self.border_size + (move[0]+1)*2, self.tile_size, self.tile_size))
