@@ -11,6 +11,7 @@ class BoardManager:
         self.screen_size = self.tile_size*8 + 60 + 9*2
         self.display = pygame.display.set_mode((self.screen_size, self.screen_size))
         pygame.display.set_caption('Chess Game')
+        self.generate_board()
 
     def generate_board(self):
         self.board_surface = pygame.Surface((self.tile_size*8, self.tile_size*8))
@@ -54,16 +55,23 @@ class BoardManager:
     def display_board(self):
         self.display.blit(self.board_surface, (30, 30))
         self.draw_pieces()
+        pygame.display.flip()
 
 
 if __name__ == '__main__':
     board_manager = BoardManager()
     board_manager.set_initial_arrengement()
-    while True:
+    board_manager.display_board()
+
+    print(board_manager.board)
+
+    running = True
+    while running:
         for event in pygame.event.get():
-            if event.type == QUIT:
+            if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
                 pygame.quit()
-                exit()
-        pygame.display.update()
-        pygame.time.Clock().tick(60)
+                running = False
+
+            elif event.type == MOUSEBUTTONDOWN:
+                board_manager.display_board()
 
