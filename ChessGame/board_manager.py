@@ -108,12 +108,18 @@ class BoardManager:
         moves = piece.get_possible_moves()
         attacks = piece.get_possible_attacks()
         for move in moves:
+            if move[0] < 0 or move[0] >= 8 or move[1] < 0 or move[1] >= 8:
+                continue
+
             if self.board[move[0]][move[1]]:
                 continue
             
             self.highlighted_moves.append(move)
             
         for attack in attacks:
+            if attack[0] < 0 or attack[0] >= 8 or attack[1] < 0 or attack[1] >= 8:
+                continue
+            
             if not self.board[attack[0]][attack[1]]:
                 continue
             
