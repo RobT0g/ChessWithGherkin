@@ -50,7 +50,8 @@ class BoardManager:
         for i in range(8):
             for j in range(8):
                 if self.board[i][j]:
-                    self.board[i][j].set_piece_position(i, j)
+                    self.board[i][j].x = i
+                    self.board[i][j].y = j
 
     def draw_pieces(self):
         for i in range(8):
@@ -107,6 +108,12 @@ class BoardManager:
     def highlight_possible_jump_moves(self, piece:Piece):
         moves = piece.get_possible_moves()
         attacks = piece.get_possible_attacks()
+
+        try:
+            if not piece.has_moved and any([self.board[m[0]][m[1]] for m in moves]):
+                moves.pop(1)
+        except: pass
+
         for move in moves:
             if move[0] < 0 or move[0] >= 8 or move[1] < 0 or move[1] >= 8:
                 continue
@@ -119,7 +126,7 @@ class BoardManager:
         for attack in attacks:
             if attack[0] < 0 or attack[0] >= 8 or attack[1] < 0 or attack[1] >= 8:
                 continue
-            
+
             if not self.board[attack[0]][attack[1]]:
                 continue
             

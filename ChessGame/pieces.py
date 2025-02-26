@@ -39,9 +39,9 @@ class Piece:
 
 
 class Pawn(Piece):
-    def __init__(self, player: bool, has_moved: bool=False):
+    def __init__(self, player: bool):
         super().__init__(player, "Pawn")
-        self.has_moved = has_moved
+        self.has_moved = False
 
     def get_possible_moves(self):
         moves = [1, 2] if not self.has_moved else [1]
