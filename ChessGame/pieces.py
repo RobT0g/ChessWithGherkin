@@ -3,7 +3,7 @@ from pygame.locals import *
 
 class Piece:
     def __init__(self, player: bool, name:str):
-        self.player = player
+        self.player = not player
         self.name = name
         self.x = None
         self.y = None
@@ -26,7 +26,7 @@ class Piece:
         return self.player
     
     def get_icon_name(self) -> str:
-        return f"{self.name}_{'W' if self.player else 'B'}"
+        return f"{self.name}_{'W' if not self.player else 'B'}"
     
     def load_icon(self):
         self.icon = pygame.image.load(f'ChessGame/icons/{self.get_icon_name()}.png')
@@ -34,6 +34,9 @@ class Piece:
     def get_icon(self) -> pygame.Surface:
         return self.icon
     
+    def get_movement_type(self) -> str:
+        pass
+
 
 class Pawn(Piece):
     def __init__(self, player: bool, has_moved: bool=False):
@@ -51,6 +54,9 @@ class Pawn(Piece):
         super().set_piece_position(x, y)
         self.has_moved = True
 
+    def get_movement_type(self):
+        return 'jump'
+
 
 class Knight(Piece):
     def __init__(self, player: bool):
@@ -62,19 +68,23 @@ class Knight(Piece):
     
     def get_possible_attacks(self):
         return self.get_possible_moves()
+
+    def get_movement_type(self):
+        return 'jump'
     
 
 class Rook(Piece):
-    def __init__(self, player: bool, board_length: int):
+    def __init__(self, player: bool):
         super().__init__(player, "Rook")
-        self.board_length = board_length
 
     def get_possible_moves(self):
-        moves = [(_x, _y) for _x in range(-self.board_length, self.board_length + 1) for _y in range(-self.board_length, self.board_length + 1) if _x == 0 or _y == 0]
-        return [(self.x + _x, self.y + _y) for _x, _y in moves if 0 <= self.x + _x < self.board_length and 0 <= self.y + _y < self.board_length]
+        return [(1, 0), (-1, 0), (0, 1), (0, -1)]
     
     def get_possible_attacks(self):
         return self.get_possible_moves()
+
+    def get_movement_type(self):
+        return 'stream'
 
 
 class Queen(Piece):
@@ -82,11 +92,13 @@ class Queen(Piece):
         super().__init__(player, "Queen")
 
     def get_possible_moves(self):
-        moves = [(_x, _y) for _x in range(-8, 9) for _y in range(-8, 9) if _x == 0 or _y == 0 or abs(_x) == abs(_y)]
-        return [(self.x + _x, self.y + _y) for _x, _y in moves if 0 <= self.x + _x < 8 and 0 <= self.y + _y < 8]
+        return [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
     
     def get_possible_attacks(self):
         return self.get_possible_moves()
+
+    def get_movement_type(self):
+        return 'stream'
     
 
 class King(Piece):
@@ -100,14 +112,19 @@ class King(Piece):
     def get_possible_attacks(self):
         return self.get_possible_moves()
 
+    def get_movement_type(self):
+        return 'jump'
+
 
 class Bishop(Piece):
     def __init__(self, player: bool):
         super().__init__(player, "Bishop")
 
     def get_possible_moves(self):
-        moves = [(_x, _y) for _x in range(-8, 9) for _y in range(-8, 9) if abs(_x) == abs(_y)]
-        return [(self.x + _x, self.y + _y) for _x, _y in moves if 0 <= self.x + _x < 8 and 0 <= self.y + _y < 8]
+        return [(1, 1), (-1, -1), (1, -1), (-1, 1)]
     
     def get_possible_attacks(self):
         return self.get_possible_moves()
+
+    def get_movement_type(self):
+        return 'stream'

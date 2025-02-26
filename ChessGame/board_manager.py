@@ -41,8 +41,11 @@ class BoardManager:
         self.board[7][3] = Queen(True)
         self.board[0][4] = King(False)
         self.board[7][4] = King(True)
-        self.generate_board()
-        self.display_board()
+
+        for i in range(8):
+            for j in range(8):
+                if self.board[i][j]:
+                    self.board[i][j].set_piece_position(i, j)
 
     def draw_pieces(self):
         for i in range(8):
@@ -53,6 +56,58 @@ class BoardManager:
                     icon = piece.get_icon()
                     self.display.blit(icon, (j*self.tile_size + self.border_size + (j+1)*2, i*self.tile_size + self.border_size + (i+1)*2))
 
+    def on_click(self):
+        x, y = pygame.mouse.get_pos()
+        col = (x - self.border_size) // (self.tile_size + 2)
+        row = (y - self.border_size) // (self.tile_size + 2)
+        print(f"Clicked on row: {row}, col: {col}")
+
+        if not self.board[row][col]:
+            return
+        
+        piece = self.board[row][col]
+        print(f"Moves: {moves}")
+        print(f"Attacks: {attacks}")
+
+        self.highlight_possible_moves(moves, attacks, piece.name == "Pawn")
+
+    def highlight_possible_jump_moves(self, piece:Piece):
+        moves = piece.get_possible_moves()
+        attacks = piece.get_possible_attacks()
+        for move in moves:
+            if self.board[move[0]][move[1]]:
+                continue
+            
+            pygame.draw.rect(self.display, (0, 255, 0), (move[1]*self.tile_size + self.border_size + (move[1]+1)*2, move[0]*self.tile_size + self.border_size + (move[0]+1)*2, self.tile_size, self.tile_size))
+
+        for attack in attacks:
+            if not self.board[attack[0]][attack[1]]:
+                continue
+            
+            pygame.draw.rect(self.display, (255, 0, 0), (attack[1]*self.tile_size + self.border_size + (attack[1]+1)*2, attack[0]*self.tile_size + self.border_size + (attack[0]+1)*2, self.tile_size, self.tile_size))
+        
+    def highlight_possible_stream_moves(self, piece:Piece):
+        moves = piece.get_possible_moves()
+        attacks = piece.get_possible_attacks()
+        
+        for move in moves:
+            x, y = piece.get_piece_position()
+            x += move[0]
+            y += move[1]
+
+            while 0 <= x < 8 and 0 <= y < 8:
+                if self.board[x][y] and self.board[x][y].player == piece.player:
+                    break
+
+                if self.board[x][y]:
+                    pygame.draw.rect(self.display, (255, 0, 0), (y*self.tile_size + self.border_size + (y+1)*2, x*self.tile_size + self.border_size + (x+1)*2, self.tile_size, self.tile_size))
+                    break
+                
+                pygame.draw.rect(self.display, (0, 255, 0), (y*self.tile_size + self.border_size + (y+1)*2, x*self.tile_size + self.border_size + (x+1)*2, self.tile_size, self.tile_size))
+                x += move[0]
+                y += move[1]
+
+    
     def display_board(self):
         self.display.blit(self.board_surface, (self.border_size, self.border_size))
         pygame.draw.rect(self.display, (139, 69, 19), (0, 0, self.screen_size, self.screen_size), self.border_size)
@@ -75,5 +130,6 @@ if __name__ == '__main__':
                 running = False
 
             elif event.type == MOUSEBUTTONDOWN:
+                board_manager.on_click()
                 board_manager.display_board()
 
