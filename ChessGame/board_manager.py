@@ -6,20 +6,54 @@ pygame.init()
 
 class BoardManager:
     def __init__(self):
-        self.board = [[0 for i in range(8)] for j in range(8)]
+        self.board = [[None for i in range(8)] for j in range(8)]
         self.tile_size = 75
         self.screen_size = self.tile_size*8 + 60 + 9*2
         self.display = pygame.display.set_mode((self.screen_size, self.screen_size))
         pygame.display.set_caption('Chess Game')
 
+    def generate_board(self):
+        self.board_surface = pygame.Surface((self.tile_size*8, self.tile_size*8))
+        for i in range(8):
+            for j in range(8):
+                color = (255, 255, 255) if (i+j)%2 == 0 else (0, 0, 0)
+                pygame.draw.rect(self.board_surface, color, (i*self.tile_size, j*self.tile_size, self.tile_size, self.tile_size))
+
     def set_initial_arrengement(self):
-        self.board[0] = [1, 2, 3, 4, 5, 3, 2, 1]
-        self.board[1] = [6, 6, 6, 6, 6, 6, 6, 6]
-        self.board[6] = [-6, -6, -6, -6, -6, -6, -6, -6]
-        self.board[7] = [-1, -2, -3, -4, -5, -3, -2, -1]
+        for i in range(8):
+            self.board[1][i] = Pawn(False)
+            self.board[6][i] = Pawn(True)
+        self.board[0][0] = Rook(False, 8)
+        self.board[0][7] = Rook(False, 8)
+        self.board[7][0] = Rook(True, 8)
+        self.board[7][7] = Rook(True, 8)
+        self.board[0][1] = Knight(False)
+        self.board[0][6] = Knight(False)
+        self.board[7][1] = Knight(True)
+        self.board[7][6] = Knight(True)
+        self.board[0][2] = Bishop(False)
+        self.board[0][5] = Bishop(False)
+        self.board[7][2] = Bishop(True)
+        self.board[7][5] = Bishop(True)
+        self.board[0][3] = Queen(False)
+        self.board[7][3] = Queen(True)
+        self.board[0][4] = King(False)
+        self.board[7][4] = King(True)
+        self.generate_board()
+        self.display_board()
 
+    def draw_pieces(self):
+        for i in range(8):
+            for j in range(8):
+                piece = self.board[i][j]
+                if piece:
+                    piece.load_icon()
+                    icon = piece.get_icon()
+                    self.display.blit(icon, (j*self.tile_size + 30, i*self.tile_size + 30))
 
-
+    def display_board(self):
+        self.display.blit(self.board_surface, (30, 30))
+        self.draw_pieces()
 
 
 if __name__ == '__main__':

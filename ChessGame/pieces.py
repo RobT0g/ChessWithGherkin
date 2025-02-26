@@ -77,4 +77,37 @@ class Rook(Piece):
         return self.get_possible_moves()
 
 
+class Queen(Piece):
+    def __init__(self, player: bool):
+        super().__init__(player, "Queen")
+
+    def get_possible_moves(self):
+        moves = [(_x, _y) for _x in range(-8, 9) for _y in range(-8, 9) if _x == 0 or _y == 0 or abs(_x) == abs(_y)]
+        return [(self.x + _x, self.y + _y) for _x, _y in moves if 0 <= self.x + _x < 8 and 0 <= self.y + _y < 8]
     
+    def get_possible_attacks(self):
+        return self.get_possible_moves()
+    
+
+class King(Piece):
+    def __init__(self, player: bool):
+        super().__init__(player, "King")
+
+    def get_possible_moves(self):
+        moves = [(_x, _y) for _x in range(-1, 2) for _y in range(-1, 2) if _x != 0 or _y != 0]
+        return [(self.x + _x, self.y + _y) for _x, _y in moves if 0 <= self.x + _x < 8 and 0 <= self.y + _y < 8]
+    
+    def get_possible_attacks(self):
+        return self.get_possible_moves()
+
+
+class Bishop(Piece):
+    def __init__(self, player: bool):
+        super().__init__(player, "Bishop")
+
+    def get_possible_moves(self):
+        moves = [(_x, _y) for _x in range(-8, 9) for _y in range(-8, 9) if abs(_x) == abs(_y)]
+        return [(self.x + _x, self.y + _y) for _x, _y in moves if 0 <= self.x + _x < 8 and 0 <= self.y + _y < 8]
+    
+    def get_possible_attacks(self):
+        return self.get_possible_moves()
