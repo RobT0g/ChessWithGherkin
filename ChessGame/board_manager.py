@@ -179,8 +179,6 @@ if __name__ == '__main__':
     board_manager.set_initial_arrengement()
     board_manager.display_board()
 
-    print(board_manager.board)
-
     running = True
     while running:
         for event in pygame.event.get():
