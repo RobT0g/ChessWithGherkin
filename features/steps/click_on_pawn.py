@@ -20,6 +20,10 @@ def step_add_a_white_pawn_in_pos_6_6(context):
 def step_pawn_player_has_clicked_on_pawn_in_pos_6_6(context):
     step_pawn_player_clicks_on_pawn_in_pos_6_6(context)
 
+@given("'Pawn_Player' sees the square '6' '6' highlighted in 'yellow'")
+def step_pawn_player_sees_square_6_6_highlighted(context):
+    step_pawn_player_should_see_square_6_6_highlighted(context)
+
 @given("'Pawn_Player' sees the square '5' '6' highlighted in 'green'")
 def step_pawn_player_sees_square_5_6_highlighted(context):
     step_pawn_player_should_see_square_5_6_highlighted(context)
@@ -44,6 +48,11 @@ def step_pawn_player_clicks_on_highlighted_square_5_6(context):
     print(f'Highlighted moves: {context.chess_board.highlighted_moves}')
     print(f'Highlighted attacks: {context.chess_board.highlighted_attacks}')
 
+@then("'Pawn_Player' should see square '6' '6' highlighted in 'yellow'")
+def step_pawn_player_should_see_square_6_6_highlighted(context):
+    print('Checking if square 6 6 is highlighted in yellow')
+    assert (6, 6) == context.chess_board.highlighted_piece.get_piece_position()
+
 @then("'Pawn_Player' should see square '5' '6' highlighted in 'green'")
 def step_pawn_player_should_see_square_5_6_highlighted(context):
     print('Checking if square 5 6 is highlighted')
@@ -60,6 +69,12 @@ def step_pawn_player_should_see_pawn_move_from_6_6_to_5_6(context):
     assert not context.chess_board.board[6][6]
     assert context.chess_board.board[5][6]
     assert not context.chess_board.board[5][6].player
+
+@then("'Pawn_Player' should see square '6' '6' no longer highlighted")
+def step_pawn_player_should_see_square_6_6_no_long_longer_highlighted(context):
+    print('Checking if square 6 6 is no longer highlighted')
+    assert (6, 6) not in context.chess_board.highlighted_moves
+    assert not context.chess_board.highlighted_piece
 
 @then("'Pawn_Player' should see square '5' '6' no longer highlighted")
 def step_pawn_player_should_see_square_5_6_no_longer_highlighted(context):
