@@ -1,7 +1,7 @@
 import time
 from behave import *
-from ChessGame.pieces import *
-from ChessGame.board_manager import *
+from pieces import *
+from board_manager import *
 
 @given("'Pawn_Player_2' has an empty chess board with dimensons '8' by '8'")
 def step_pawn_2_create_an_eight_by_eight_chess_board(context):

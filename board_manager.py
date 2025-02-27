@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from ChessGame.pieces import *
+from pieces import *
 
 pygame.init()  
 
@@ -67,7 +67,7 @@ class BoardManager:
                     self.display.blit(icon, (j*self.tile_size + self.border_size + (j+1)*2, i*self.tile_size + self.border_size + (i+1)*2))
 
     def convert_board_coords_to_list_coords(self, x:int, y:int):
-        return ((x - self.border_size) // (self.tile_size + 2), (y - self.border_size) // (self.tile_size + 2))
+        return ((y - self.border_size) // (self.tile_size + 2), (x - self.border_size) // (self.tile_size + 2))
 
     def on_click(self, mouse_pos:tuple[int], convert_coord:bool=True):
         row, col = mouse_pos

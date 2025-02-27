@@ -29,7 +29,7 @@ class Piece:
         return f"{self.name}_{'W' if not self.player else 'B'}"
     
     def load_icon(self):
-        self.icon = pygame.image.load(f'ChessGame/icons/{self.get_icon_name()}.png')
+        self.icon = pygame.image.load(f'icons/{self.get_icon_name()}.png')
         
     def get_icon(self) -> pygame.Surface:
         return self.icon
