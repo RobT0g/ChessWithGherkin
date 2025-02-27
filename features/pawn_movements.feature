@@ -3,13 +3,15 @@ Feature: Testing pawn movement
         Given 'Pawn_Player' has an empty chess board with dimensons '8' by '8'
         And 'Pawn_Player' adds a 'Pawn' in position '6' '6' with color 'White'
         And 'Pawn_Player' clicks on the 'Pawn' in position '6' '6'
-        And the square '6' '5' is highlighted in 'green'
-        And the square '6' '4' is highlighted in 'green'
+        And 'Pawn_Player' sees the square '5' '6' highlighted in 'green'
+        And 'Pawn_Player' sees the square '4' '6' highlighted in 'green'
 
-        When 'Pawn_Player' clicks on the highlighted square '6' '5'
+        When 'Pawn_Player' clicks on the highlighted square '5' '6'
 
-        Then 'Pawn' should move from the square '6' '6' to the square '6' '5'
-        And square '6' '5' should no longer be highlighted
+        Then 'Pawn_Player' shold see 'Pawn' move from the square '6' '6' to the square '5' '6'
+        And 'Pawn_Player' should see square '6' '6' is now empty
+        And 'Pawn_Player' should see square '5' '6' no longer highlighted
+        And 'Pawn_Player' should see square '4' '6' no longer highlighted
 
     Scenario Outline: Pawn first movement to second square
         Given 'Pawn_Player' has an empty chess board with dimensons '8' by '8'

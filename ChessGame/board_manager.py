@@ -66,10 +66,14 @@ class BoardManager:
                     icon = piece.get_icon()
                     self.display.blit(icon, (j*self.tile_size + self.border_size + (j+1)*2, i*self.tile_size + self.border_size + (i+1)*2))
 
-    def on_click(self, mouse_pos:tuple[int]):
-        x, y = mouse_pos
-        col = (x - self.border_size) // (self.tile_size + 2)
-        row = (y - self.border_size) // (self.tile_size + 2)
+    def convert_board_coords_to_list_coords(self, x:int, y:int):
+        return ((x - self.border_size) // (self.tile_size + 2), (y - self.border_size) // (self.tile_size + 2))
+
+    def on_click(self, mouse_pos:tuple[int], convert_coord:bool=True):
+        row, col = mouse_pos
+        if convert_coord:
+            row, col = self.convert_board_coords_to_list_coords(row, col)
+
         print(f"Clicked on row: {row}, col: {col}")
 
         if row < 0 or row >= self.board_length or col < 0 or col >= self.board_width:

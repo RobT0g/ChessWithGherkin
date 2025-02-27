@@ -5,5 +5,5 @@ Feature: Testing pawn movement by clicking on it
 
         When 'Pawn_Player' clicks on the 'Pawn' in position '6' '6'
 
-        Then 'Pawn_Player' should see square '6' '5' highlighted in 'green'
-        And 'Pawn_Player' should see square '6' '4' highlighted in 'green'
+        Then 'Pawn_Player' should see square '5' '6' highlighted in 'green'
+        And 'Pawn_Player' should see square '4' '6' highlighted in 'green'
