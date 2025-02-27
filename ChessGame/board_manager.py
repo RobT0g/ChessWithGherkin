@@ -103,17 +103,17 @@ class BoardManager:
         print(f"Possible attacks: {attacks}")
 
         if self.highlighted_piece.get_movement_type() == 'jump':
-            self.highlight_possible_jump_moves(self.highlighted_piece)
+            self.define_possible_jump_moves(self.highlighted_piece)
 
         else:
-            self.highlight_possible_stream_moves(self.highlighted_piece)
+            self.define_possible_stream_moves(self.highlighted_piece)
 
     def move_piece(self, piece:Piece, row:int, col:int):
         self.board[piece.x][piece.y] = None
         self.board[row][col] = piece
         piece.set_piece_position(row, col)
 
-    def highlight_possible_jump_moves(self, piece:Piece):
+    def define_possible_jump_moves(self, piece:Piece):
         moves = piece.get_possible_moves()
         attacks = piece.get_possible_attacks()
 
@@ -143,7 +143,7 @@ class BoardManager:
 
             self.highlighted_attacks.append(attack)
         
-    def highlight_possible_stream_moves(self, piece:Piece):
+    def define_possible_stream_moves(self, piece:Piece):
         moves = piece.get_possible_moves()
         attacks = piece.get_possible_attacks()
 
@@ -167,6 +167,9 @@ class BoardManager:
     def display_board(self):
         self.display.blit(self.board_surface, (self.border_size, self.border_size))
         pygame.draw.rect(self.display, (139, 69, 19), (0, 0, *self.screen_size), self.border_size)
+
+        if self.highlighted_piece:
+            pygame.draw.rect(self.display, (255, 255, 0, 100), (self.highlighted_piece.y*self.tile_size + self.border_size + (self.highlighted_piece.y+1)*2, self.highlighted_piece.x*self.tile_size + self.border_size + (self.highlighted_piece.x+1)*2, self.tile_size, self.tile_size))
 
         for move in self.highlighted_moves:
             pygame.draw.rect(self.display, (0, 255, 0, 100), (move[1]*self.tile_size + self.border_size + (move[1]+1)*2, move[0]*self.tile_size + self.border_size + (move[0]+1)*2, self.tile_size, self.tile_size))
