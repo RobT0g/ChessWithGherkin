@@ -1,5 +1,5 @@
 Feature: Testing pawn movement
-    Scenario Outline: Highlighting Pawn first movement
+    Scenario: Highlighting Pawn first movement
         Given 'Pawn_Player' has an empty chess board with dimensons '8' by '8'
         And 'Pawn_Player' adds a 'Pawn' in position '6' '6' with color 'White'
 

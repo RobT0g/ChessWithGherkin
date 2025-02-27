@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from pieces import *
+from ChessGame.pieces import *
 
 pygame.init()  
 
