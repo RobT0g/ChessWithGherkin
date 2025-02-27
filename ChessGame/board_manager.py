@@ -66,8 +66,8 @@ class BoardManager:
                     icon = piece.get_icon()
                     self.display.blit(icon, (j*self.tile_size + self.border_size + (j+1)*2, i*self.tile_size + self.border_size + (i+1)*2))
 
-    def on_click(self):
-        x, y = pygame.mouse.get_pos()
+    def on_click(self, mouse_pos:tuple[int]):
+        x, y = mouse_pos
         col = (x - self.border_size) // (self.tile_size + 2)
         row = (y - self.border_size) // (self.tile_size + 2)
         print(f"Clicked on row: {row}, col: {col}")
@@ -187,6 +187,6 @@ if __name__ == '__main__':
                 running = False
 
             elif event.type == MOUSEBUTTONDOWN:
-                board_manager.on_click()
+                board_manager.on_click(pygame.mouse.get_pos())
                 board_manager.display_board()
 

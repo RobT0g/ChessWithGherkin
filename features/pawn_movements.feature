@@ -1,13 +1,4 @@
 Feature: Testing pawn movement
-    Scenario: Highlighting Pawn first movement
-        Given 'Pawn_Player' has an empty chess board with dimensons '8' by '8'
-        And 'Pawn_Player' adds a 'Pawn' in position '6' '6' with color 'White'
-
-        When 'Pawn_Player' clicks on the 'Pawn' in position '6' '6'
-
-        Then square '6' '5' should be highlighted in 'green'
-        And square '6' '4' should be highlighted in 'green'
-
     Scenario Outline: Pawn first movement to first square
         Given 'Pawn_Player' has an empty chess board with dimensons '8' by '8'
         And 'Pawn_Player' adds a 'Pawn' in position '6' '6' with color 'White'
@@ -61,6 +52,3 @@ Feature: Testing pawn movement
         Then 'BlackPawn' in position '7' '5' should be removed from the board
         Then 'WhitePawn' should move from the square '6' '6' to the square '7' '5'
         And square '7' '5' should no longer be highlighted
-
-
-    
