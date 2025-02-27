@@ -5,7 +5,8 @@ Feature: Testing pawn movement
 
         When 'Pawn_Player_2' clicks on the 'Pawn' in position <row> <column>
 
-        Then 'Pawn_Player_2' should see square <row_move_1> <column> highlighted in 'green'
+        Then 'Pawn_Player_2' should see square <row> <column> highlighted in 'yellow'
+        And 'Pawn_Player_2' should see square <row_move_1> <column> highlighted in 'green'
         And 'Pawn_Player_2' should see square <row_move_2> <column> highlighted in 'green'
     
     Examples:
@@ -18,14 +19,25 @@ Feature: Testing pawn movement
         Given 'Pawn_Player_2' has an empty chess board with dimensons '8' by '8'
         And 'Pawn_Player_2' adds a 'Pawn' in position <row> <column> with color 'White'
         And 'Pawn_Player_2' has clicked on the 'Pawn' in position <row> <column>
+        And 'Pawn_Player_2' sees the square <row> <column> highlighted in 'yellow'
         And 'Pawn_Player_2' sees the square <row_move_1> <column> highlighted in 'green'
         And 'Pawn_Player_2' sees the square <row_move_2> <column> highlighted in 'green'
 
         When 'Pawn_Player_2' clicks on the highlighted square <row_to_move> <column>
 
         Then 'Pawn_Player_2' shold see 'Pawn' move from the square <row> <column> to the square <row_to_move> <column>
+        And 'Pawn_Player_2' should see square <row> <column> no longer highlighted
         And 'Pawn_Player_2' should see square <row_move_1> <column> no longer highlighted
         And 'Pawn_Player_2' should see square <row_move_2> <column> no longer highlighted
+
+    Examples:
+        | row | column | row_move_1 | row_move_2 | row_to_move |
+        | 6   | 6      | 5          | 4          | 5           |
+        | 6   | 6      | 5          | 4          | 4           |
+        | 5   | 5      | 4          | 3          | 4           |
+        | 5   | 5      | 4          | 3          | 3           |
+        | 7   | 3      | 6          | 5          | 6           |
+        | 7   | 3      | 6          | 5          | 5           |
 
     # Scenario: Pawn atacks another pawn
     #     Given 'Pawn_Player_2' has an empty chess board with dimensons '8' by '8'
