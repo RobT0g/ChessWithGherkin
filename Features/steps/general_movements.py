@@ -89,15 +89,22 @@ def step_i_clicked_on_piece_in_pos(context, piece_color:str, piece_type:str, row
     context.chess_board.on_click((row, column), False)
     print(f'Clicked on the {piece_color} {piece_type} in position {row} {column}')
 
-@given("I see the square {row} {column} highlighted in 'yellow'")
-def step_i_see_square_highlighted_in_yellow(context, row, column):
+@given("I see the square {row} {column} highlighted in {highlight_color}")
+def step_i_see_square_highlighted_in_yellow(context, row, column, highlight_color):
     row, column = int(row.replace("'", '')), int(column.replace("'", ''))
-    assert check_square_highlighted_in_yellow(context, row, column), f'Square {row} {column} not highlighted in yellow'
-    try:
-        print(context.chess_board.highlighted_piece.get_piece_position())
-    except:
-        print(f'No highlighted piece')
+    highlight_color = highlight_color.replace("'",'')
+    if highlight_color == 'yellow':
+        assert check_square_highlighted_in_yellow(context, row, column), f'Square {row} {column} not highlighted in yellow'
 
+    elif highlight_color == 'green':
+        assert check_square_highlighted_in_green(context, row, column), f'Square {row} {column} not highlighted in green'
+
+    elif highlight_color == 'red':
+        assert check_square_highlighted_in_red(context, row, column), f'Square {row} {column} not highlighted in red'
+
+    else:
+        assert False, f'Invalid highlight color: {highlight_color}'
+    
 @given("I see all the squares in the list {squares} highlighted in {highlight_color}")
 def step_i_see_squares_highlighted_in_color(context, squares, highlight_color):
     squares = get_positions_list_from_string(squares)

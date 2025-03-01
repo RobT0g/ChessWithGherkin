@@ -3,7 +3,7 @@ from pygame.locals import *
 
 class Piece:
     def __init__(self, player: bool, name:str):
-        self.player = not player
+        self.player = player
         self.name = name
         self.x = None
         self.y = None
@@ -26,7 +26,7 @@ class Piece:
         return self.player
     
     def get_icon_name(self) -> str:
-        return f"{self.name}_{'W' if not self.player else 'B'}"
+        return f"{self.name}_{'W' if self.player else 'B'}"
     
     def load_icon(self):
         self.icon = pygame.image.load(f'icons/{self.get_icon_name()}.png')
@@ -45,10 +45,10 @@ class Pawn(Piece):
 
     def get_possible_moves(self):
         moves = [1, 2] if not self.has_moved else [1]
-        return [(self.x + (v if self.player else -v), self.y) for v in moves]
+        return [(self.x + (-v if self.player else v), self.y) for v in moves]
 
     def get_possible_attacks(self):
-        return [(self.x + (1 if self.player else -1), self.y + 1), (self.x + (1 if self.player else -1), self.y - 1)]
+        return [(self.x + (-1 if self.player else 1), self.y + 1), (self.x + (-1 if self.player else 1), self.y - 1)]
     
     def set_piece_position(self, x, y):
         super().set_piece_position(x, y)

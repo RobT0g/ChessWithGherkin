@@ -17,7 +17,7 @@ class BoardManager:
         pygame.display.set_caption('Chess Game')
         
         self.generate_board()
-        self.player_turn = False
+        self.player_turn = True
 
         self.highlighted_piece = None
         self.highlighted_moves = []
