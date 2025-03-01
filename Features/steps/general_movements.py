@@ -74,6 +74,11 @@ def step_add_a_piece_in_pos(context, piece_type:str, row:int, column:int, piece_
     print(f'Added a {piece_color} {piece_type} in position {row} {column}')
     check_piece_in_pos(context, row, column, piece_type, is_white_piece)
 
+@given("it is {piece_color} turn to play")
+def step_set_player_turn(context, piece_color:str):
+    context.chess_board.player_turn = piece_color.replace("'", '') == 'White'
+    print(f"It's {piece_color} turn to play")
+
 @given ("I have clicked on the {piece_color} {piece_type} in position {row} {column}")
 def step_i_clicked_on_piece_in_pos(context, piece_color:str, piece_type:str, row:int, column:int):
     row, column = int(row.replace("'", '')), int(column.replace("'", ''))
@@ -94,7 +99,7 @@ def step_i_see_square_highlighted_in_yellow(context, row, column):
         print(f'No highlighted piece')
 
 @given("I see all the squares in the list {squares} highlighted in {highlight_color}")
-def step_pawn_2_sees_square_highlighted(context, squares, highlight_color):
+def step_i_see_squares_highlighted_in_color(context, squares, highlight_color):
     squares = get_positions_list_from_string(squares)
     for square in squares:
         row, column = square
@@ -111,7 +116,18 @@ def step_pawn_2_sees_square_highlighted(context, squares, highlight_color):
         else:
             assert False, f'Invalid highlight color: {highlight_color}'
 
-@when("'Pawn_Player_2' clicks on the 'Pawn' in position {row} {column}")
+@given("the {piece_color} {piece_type} in position {row} {column} has already moved")
+def step_set_piece_as_already_moved(context, piece_color, piece_type, row, column):
+    row, column = int(row.replace("'", '')), int(column.replace("'", ''))
+    piece_type = piece_type.replace("'", '')
+    piece_color = piece_color.replace("'", '')
+    check_piece_in_pos(context, row, column, piece_type, piece_color)
+
+    piece = context.chess_board.board[row][column]
+    piece.has_moved = True
+    print(f'Set the {piece_color} {piece_type} in position {row} {column} as already moved')
+
+@when("I clicks on the 'Pawn' in position {row} {column}")
 def step_pawn_2_clicks_on_pawn_in_pos(context, row, column):
     row, column = int(row), int(column)
     context.chess_board.on_click((row, column), False)
@@ -120,40 +136,47 @@ def step_pawn_2_clicks_on_pawn_in_pos(context, row, column):
     print(f'Highlighted moves: {context.chess_board.highlighted_moves}')
     print(f'Highlighted attacks: {context.chess_board.highlighted_attacks}')
 
-@when("'Pawn_Player_2' clicks on the highlighted square {row} {column}")
+@when("I click on the square {row} {column}")
 def step_pawn_2_clicks_on_highlighted_square(context, row, column):
-    row, column = int(row), int(column)
+    row, column = int(row.replace("'", '')), int(column.replace("'", ''))
+    
     context.chess_board.on_click((row, column), False)
-    print(f'Clicked on the highlighted square {row} {column}')
-    print(f'Is it my turn: {context.chess_board.player_turn}')
-    print(f'Highlighted moves: {context.chess_board.highlighted_moves}')
-    print(f'Highlighted attacks: {context.chess_board.highlighted_attacks}')
+    print(f'Clicked on the square {row} {column}')
+    print(f'> Is it my turn: {context.chess_board.player_turn}')
+    print(f'> Highlighted moves: {context.chess_board.highlighted_moves}')
+    print(f'> Highlighted attacks: {context.chess_board.highlighted_attacks}\n')
 
-@then("'Pawn_Player_2' should see square {row} {column} highlighted in 'yellow'")
+@then("I should see square {row} {column} highlighted in 'yellow'")
 def step_pawn_2_should_see_square_highlighted_in_yellow(context, row, column):
     row, column = int(row), int(column)
     print(f'Checking if square {row} {column} is highlighted')
     assert (row, column) == context.chess_board.highlighted_piece.get_piece_position()
 
-@then("'Pawn_Player_2' should see square {row} {column} highlighted in 'green'")
+@then("I should see square {row} {column} highlighted in 'green'")
 def step_pawn_2_should_see_square_highlighted_in_green(context, row, column):
     row, column = int(row), int(column)
     print(f'Checking if square {row} {column} is highlighted')
     assert (row, column) in context.chess_board.highlighted_moves
 
-@then("'Pawn_Player_2' shold see 'Pawn' move from the square {row_init} {column_init} to the square {row_to_move} {column_to_move}")
-def step_pawn_2_should_see_pawn_move_to_square(context, row_init, column_init, row_to_move, column_to_move):
-    row_init, column_init, row_to_move, column_to_move = int(row_init), int(column_init), int(row_to_move), int(column_to_move)
-    print(f'Checking if the pawn moved from {row_init} {column_init} to {row_to_move} {column_to_move}')
+@then("I shold see the {piece_color} {piece_type} move from the square {row_init} {column_init} to the square {row_to_move} {column_to_move}")
+def step_i_should_see_piece_move_to_square(context, piece_color, piece_type, row_init, column_init, row_to_move, column_to_move):
+    row_init = int(row_init.replace("'", ''))
+    column_init = int(column_init.replace("'", ''))
+    row_to_move = int(row_to_move.replace("'", ''))
+    column_to_move = int(column_to_move.replace("'", ''))
+    piece_type = piece_type.replace("'", '')
+    piece_color = piece_color.replace("'", '')
+
+    print(f'Checking if the {piece_color} {piece_type} moved from {row_init} {column_init} to {row_to_move} {column_to_move}')
     assert not context.chess_board.highlighted_piece
     assert not context.chess_board.board[row_init][column_init]
     assert context.chess_board.board[row_to_move][column_to_move]
-    assert not context.chess_board.board[row_to_move][column_to_move].player
+    check_piece_in_pos(context, row_to_move, column_to_move, piece_type, piece_color)
 
-@then("'Pawn_Player_2' should see square {row} {column} no longer highlighted")
-def step_pawn_2_should_see_square_no_longer_highlighted(context, row, column):
-    row, column = int(row), int(column)
-    print(f'Checking if square {row} {column} is no longer highlighted')
+@then("there should not be any squares highlighted in any color")
+def step_pawn_2_should_see_square_no_longer_highlighted(context):
+    print('Checking if there are no more squares highlighted')
     assert not context.chess_board.highlighted_piece
-    assert (row, column) not in context.chess_board.highlighted_moves
-    assert (row, column) not in context.chess_board.highlighted_attacks
+    assert not context.chess_board.highlighted_moves
+    assert not context.chess_board.highlighted_attacks 
+

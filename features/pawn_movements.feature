@@ -2,11 +2,12 @@ Feature: Testing pawn movements
     Scenario Outline: White Pawn taking the first move
         Given I have an empty chess board with dimensons '8' by '8'
         And I add a 'Pawn' in position <row> <column> with color 'White'
+        And it is 'White' turn to play
         And I have clicked on the 'White' 'Pawn' in position <row> <column>
         And I see the square <row> <column> highlighted in 'yellow'
         And I see all the squares in the list <green_squares> highlighted in 'green'
 
-        When I click on the square highlighted in 'green' <row_to_move> <column>
+        When I click on the square <row_to_move> <column>
 
         Then I shold see the 'White' 'Pawn' move from the square <row> <column> to the square <row_to_move> <column>
         And there should not be any squares highlighted in any color
@@ -24,6 +25,7 @@ Feature: Testing pawn movements
         Given I have an empty chess board with dimensons '8' by '8'
         And I add a 'Pawn' in position <row> <column> with color 'White'
         And the 'White' 'Pawn' in position <row> <column> has already moved
+        And it is 'White' turn to play
         And I have clicked on the 'White' 'Pawn' in position <row> <column>
         And I see the square <row> <column> highlighted in 'yellow'
         And I see all the squares in the list <green_squares> highlighted in 'green'
@@ -42,6 +44,7 @@ Feature: Testing pawn movements
     Scenario Outline: Black Pawn taking the first move
         Given I have an empty chess board with dimensons '8' by '8'
         And I add a 'Pawn' in position <row> <column> with color 'Black'
+        And it is 'Black' turn to play
         And I have clicked on the 'Black' 'Pawn' in position <row> <column>
         And I see the square <row> <column> highlighted in 'yellow'
         And I see all the squares in the list <green_squares> highlighted in 'green'
@@ -64,6 +67,7 @@ Feature: Testing pawn movements
         Given I have an empty chess board with dimensons '8' by '8'
         And I add a 'Pawn' in position <row> <column> with color 'Black'
         And the 'Black' 'Pawn' in position <row> <column> has already moved
+        And it is 'Black' turn to play
         And I have clicked on the 'Black' 'Pawn' in position <row> <column>
         And I see the square <row> <column> highlighted in 'yellow'
         And I see all the squares in the list <green_squares> highlighted in 'green'
