@@ -3,14 +3,24 @@ from behave import *
 from pieces import *
 from board_manager import *
 
-@given("'Pawn_Player_2' has an empty chess board with dimensons '8' by '8'")
-def step_pawn_2_create_an_eight_by_eight_chess_board(context):
-    context.chess_board = BoardManager(8, 8)
-    print('Created an 8x8 chess board')
+@given("I have an empty chess board with dimensons '{length}' by '{width}'")
+def step_pawn_2_create_an_eight_by_eight_chess_board(context, length:int, width:int):
+    context.chess_board = BoardManager(length, width)
+    print(f'Created a {length}x{width} chess board')
 
-@given("'Pawn_Player_2' adds a 'Pawn' in position {row} {column} with color 'White'")
-def step_pawn_2_add_a_white_pawn_in_pos(context, row, column):
+@given("'I add a '{piece_type}' in position {row} {column} with color '{piece_color}'")
+def step_pawn_2_add_a_white_pawn_in_pos(context, piece_type:str, row:int, column:int, piece_color:str):
     row, column = int(row), int(column)
+    is_white_piece = piece_color == 'White'
+    piece = None
+    
+    match piece_type:
+        case 'Pawn':
+            piece = Pawn(is_white_piece)
+
+        case 'Rook':
+            piece = Rook(is_white_piece)
+
     context.chess_board.board[row][column] = Pawn(True)
     context.chess_board.board[row][column].x = row
     context.chess_board.board[row][column].y = column
