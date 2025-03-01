@@ -5,9 +5,9 @@ from board_manager import *
 
 def check_piece_in_pos(context, row:int, column:int, piece_name:str, piece_color:str):
     row, column = int(row), int(column)
-    assert context.chess_board.board[row][column], 'Piece not added'
-    assert context.chess_board.board[row][column].get_name == piece_name, 'Piece name not set'
-    assert context.chess_board.board[row][column].player == piece_color, 'Piece color not set'
+    assert context.chess_board.board[row][column], f'Piece not added: {context.chess_board.board[row][column]}'
+    assert context.chess_board.board[row][column].get_icon_name() == f'{piece_name}_{piece_color[0]}', f'Piece name not set: {context.chess_board.board[row][column].get_icon_name()} should be {piece_name}_{piece_color[0]}'
+    assert context.chess_board.board[row][column].player != piece_color, f'Piece color not set: {context.chess_board.board[row][column].player} should be {"White"  if piece_color else "Black"}'
 
 def check_square_highlighted_in_yellow(context, row:int, column:int) -> bool:
     if not context.chess_board.highlighted_piece:
@@ -35,10 +35,10 @@ def get_positions_list_from_string(squares:str) -> list[tuple[int]]:
 
 @given("I have an empty chess board with dimensons {length} by {width}")
 def step_create_chess_board_with_dimensions(context, length:int, width:int):
-    context.chess_board = BoardManager(length, width)
+    context.chess_board = BoardManager(int(length.replace("'", '')), int(width.replace("'", '')))
     print(f'Created a {length}x{width} chess board')
 
-@given("'I add a {piece_type} in position {row} {column} with color {piece_color}")
+@given("I add a {piece_type} in position {row} {column} with color {piece_color}")
 def step_add_a_piece_in_pos(context, piece_type:str, row:int, column:int, piece_color:str):
     row, column = int(row.replace("'", '')), int(column.replace("'", ''))
     piece_type = piece_type.replace("'", '')
@@ -72,7 +72,7 @@ def step_add_a_piece_in_pos(context, piece_type:str, row:int, column:int, piece_
     piece.x = row
     piece.y = column
     print(f'Added a {piece_color} {piece_type} in position {row} {column}')
-    check_piece_in_pos(context, row, column, piece_type, is_white_piece)
+    check_piece_in_pos(context, row, column, piece_type, piece_color)
 
 @given("it is {piece_color} turn to play")
 def step_set_player_turn(context, piece_color:str):
