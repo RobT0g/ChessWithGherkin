@@ -7,7 +7,7 @@ def check_piece_in_pos(context, row:int, column:int, piece_name:str, piece_color
     row, column = int(row), int(column)
     assert context.chess_board.board[row][column], f'Piece not added: {context.chess_board.board[row][column]}'
     assert context.chess_board.board[row][column].get_icon_name() == f'{piece_name}_{piece_color[0]}', f'Piece name not set: {context.chess_board.board[row][column].get_icon_name()} should be {piece_name}_{piece_color[0]}'
-    assert context.chess_board.board[row][column].player != piece_color, f'Piece color not set: {context.chess_board.board[row][column].player} should be {"White"  if piece_color else "Black"}'
+    assert context.chess_board.board[row][column].player == (piece_color == 'White'), f'Piece color not set: {context.chess_board.board[row][column].player} should be {"White"  if piece_color else "Black"}'
 
 def check_square_highlighted_in_yellow(context, row:int, column:int) -> bool:
     if not context.chess_board.highlighted_piece:
@@ -108,6 +108,7 @@ def step_i_see_square_highlighted_in_yellow(context, row, column, highlight_colo
 @given("I see all the squares in the list {squares} highlighted in {highlight_color}")
 def step_i_see_squares_highlighted_in_color(context, squares, highlight_color):
     squares = get_positions_list_from_string(squares)
+    highlight_color = highlight_color.replace("'", '')
     for square in squares:
         row, column = square
         

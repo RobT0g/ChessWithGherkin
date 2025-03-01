@@ -30,7 +30,7 @@ Feature: Testing pawn movements
         And I see the square <row> <column> highlighted in 'yellow'
         And I see all the squares in the list <green_squares> highlighted in 'green'
 
-        When I click on the square highlighted in 'green' <row_to_move> <column>
+        When I click on the square <row_to_move> <column>
 
         Then I shold see the 'White' 'Pawn' move from the square <row> <column> to the square <row_to_move> <column>
         And there should not be any squares highlighted in any color
@@ -49,7 +49,7 @@ Feature: Testing pawn movements
         And I see the square <row> <column> highlighted in 'yellow'
         And I see all the squares in the list <green_squares> highlighted in 'green'
 
-        When I click on the square highlighted in 'green' <row_to_move> <column>
+        When I click on the square <row_to_move> <column>
 
         Then I shold see the 'Black' 'Pawn' move from the square <row> <column> to the square <row_to_move> <column>
         And there should not be any squares highlighted in any color
@@ -72,7 +72,7 @@ Feature: Testing pawn movements
         And I see the square <row> <column> highlighted in 'yellow'
         And I see all the squares in the list <green_squares> highlighted in 'green'
 
-        When I click on the square highlighted in 'green' <row_to_move> <column>
+        When I click on the square <row_to_move> <column>
 
         Then I shold see the 'Black' 'Pawn' move from the square <row> <column> to the square <row_to_move> <column>
         And there should not be any squares highlighted in any color
