@@ -212,6 +212,28 @@ class BoardManager:
             pygame.draw.rect(self.display, (255, 0, 0, 100), (attack[1]*self.tile_size + self.border_size + (attack[1]+1)*2, attack[0]*self.tile_size + self.border_size + (attack[0]+1)*2, self.tile_size, self.tile_size))
 
         self.draw_pieces()
+
+        if self.play_state == 'Promotion':
+            pygame.draw.rect(self.display, (128, 0, 128, 128), (self.screen_size[0]//2 - 200, self.screen_size[1]//2 - 125, 400, 250))
+            font = pygame.font.Font(None, 24)
+            text = font.render("Pick which piece to promote the pawn to:", True, (255, 255, 255))
+            text_rect = text.get_rect(center=(self.screen_size[0]//2, self.screen_size[1]//2 - 100))
+            self.display.blit(text, text_rect)
+
+            for i, piece in enumerate(self.promotion_options):
+                piece.load_icon()
+                icon = piece.get_icon()
+                piece_pos = [self.screen_size[0]//2, self.screen_size[1]//2 - 80 + (i//2)*100]
+                
+                if i % 2 == 0:
+                    piece_pos[0] -= 50 + icon.get_width()
+                
+                else:
+                    piece_pos[0] += 50
+
+                self.display.blit(icon, piece_pos)
+            pass
+
         pygame.display.flip()
 
 

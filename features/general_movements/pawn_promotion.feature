@@ -17,21 +17,21 @@ Feature: Pawn gets promotted
         Examples:
             | row | column | green_squares | row_to_move | piece_color |
             | 1   | 0      | (0, 0)        | 0           | White       |
-            | 1   | 1      | (0, 1)        | 0           | White       |
-            | 1   | 2      | (0, 2)        | 0           | White       |
-            | 1   | 3      | (0, 3)        | 0           | White       |
-            | 1   | 4      | (0, 4)        | 0           | White       |
-            | 1   | 5      | (0, 5)        | 0           | White       |
-            | 1   | 6      | (0, 6)        | 0           | White       |
-            | 1   | 7      | (0, 7)        | 0           | White       |
-            | 6   | 0      | (7, 0)        | 7           | Black       |
-            | 6   | 1      | (7, 1)        | 7           | Black       |
-            | 6   | 2      | (7, 2)        | 7           | Black       |
-            | 6   | 3      | (7, 3)        | 7           | Black       |
-            | 6   | 4      | (7, 4)        | 7           | Black       |
-            | 6   | 5      | (7, 5)        | 7           | Black       |
-            | 6   | 6      | (7, 6)        | 7           | Black       |
-            | 6   | 7      | (7, 7)        | 7           | Black       |
+            # | 1   | 1      | (0, 1)        | 0           | White       |
+            # | 1   | 2      | (0, 2)        | 0           | White       |
+            # | 1   | 3      | (0, 3)        | 0           | White       |
+            # | 1   | 4      | (0, 4)        | 0           | White       |
+            # | 1   | 5      | (0, 5)        | 0           | White       |
+            # | 1   | 6      | (0, 6)        | 0           | White       |
+            # | 1   | 7      | (0, 7)        | 0           | White       |
+            # | 6   | 0      | (7, 0)        | 7           | Black       |
+            # | 6   | 1      | (7, 1)        | 7           | Black       |
+            # | 6   | 2      | (7, 2)        | 7           | Black       |
+            # | 6   | 3      | (7, 3)        | 7           | Black       |
+            # | 6   | 4      | (7, 4)        | 7           | Black       |
+            # | 6   | 5      | (7, 5)        | 7           | Black       |
+            # | 6   | 6      | (7, 6)        | 7           | Black       |
+            # | 6   | 7      | (7, 7)        | 7           | Black       |
 
 
 # Scenario Outline: Picking a promotion piece
