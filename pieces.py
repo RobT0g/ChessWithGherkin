@@ -37,6 +37,9 @@ class Piece:
     def get_movement_type(self) -> str:
         pass
 
+    def __str__(self):
+        return f"{'White' if self.player else 'Black'} {self.name} in position ({self.x}, {self.y})"
+
 
 class Pawn(Piece):
     def __init__(self, player: bool):

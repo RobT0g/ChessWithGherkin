@@ -4,24 +4,75 @@ from pieces import *
 from board_manager import *
 
 def check_piece_in_pos(context, row:int, column:int, piece_name:str, piece_color:str, check_not_there:bool=False):
+    '''
+        Common function to check if a piece is in a given position.
+        Note: Will return error if used to check an empty square.
+        Args:
+            context (object): The context object.
+            row (int): The row of the piece.
+            column (int): The column of the piece.
+            piece_name (str): The name of the piece.
+            piece_color (str): The color of the piece.
+            check_not_there (bool, optional): Set to True if the piece should not be there. Defaults to False.
+    '''
+
     row, column = int(row), int(column)
-    assert context.chess_board.board[row][column] != check_not_there, f'Piece not added: {context.chess_board.board[row][column]}'
-    assert (context.chess_board.board[row][column].get_icon_name() == f'{piece_name}_{piece_color[0]}') != check_not_there, f'Piece name not set: {context.chess_board.board[row][column].get_icon_name()} should be {piece_name}_{piece_color[0]}'
-    assert (context.chess_board.board[row][column].player == (piece_color == 'White')) != check_not_there, f'Piece color not set: {context.chess_board.board[row][column].player} should be {"White"  if piece_color else "Black"}'
+    assert context.chess_board.board[row][column] != check_not_there, f'Piece should {"not " if check_not_there else ""} be on {row} {column}: {context.chess_board.board[row][column]}'
+    assert (context.chess_board.board[row][column].get_icon_name() == f'{piece_name}_{piece_color[0]}') != check_not_there, f'Piece name not matching: {context.chess_board.board[row][column].get_icon_name()} should {"not" if check_not_there else ""}be {piece_name}_{piece_color[0]}'
+    assert (context.chess_board.board[row][column].player == (piece_color == 'White')) != check_not_there, f'Piece color not matching: {context.chess_board.board[row][column].player} should {"not" if check_not_there else ""}be {"White"  if piece_color else "Black"}'
 
 def check_square_highlighted_in_yellow(context, row:int, column:int) -> bool:
+    '''
+        Check if a square is highlighted in yellow
+        Args:
+            context: The context object
+            row (int): The row of the square
+            column (int): The column of the square
+        Returns:
+            bool: True if the square is highlighted in yellow, False otherwise
+    '''
     if not context.chess_board.highlighted_piece:
         return False
     
     return context.chess_board.highlighted_piece.get_piece_position() == (row, column)
 
 def check_square_highlighted_in_green(context, row:int, column:int) -> bool:
+    '''    
+        Check if a square is highlighted in green.
+            context: The test context containing the chess board.
+            row (int): The row index of the square.
+            column (int): The column index of the square.
+        Returns:
+            bool: True if the square is highlighted in green, False otherwise.
+    '''
+   
     return (row, column) in context.chess_board.highlighted_moves
 
 def check_square_highlighted_in_red(context, row:int, column:int) -> bool:
+    """
+    Checks if a specific square on the chess board is highlighted in red.
+    Args:
+        context: The context object containing the chess board state.
+        row (int): The row index of the square to check.
+        column (int): The column index of the square to check.
+    Returns:
+        bool: True if the square is highlighted in red, False otherwise.
+    """
+
     return (row, column) in context.chess_board.highlighted_attacks
 
 def check_square_is_not_highlighted(context, row:int, column:int) -> bool:
+    """
+    Checks if a specific square on the chessboard is not highlighted in any color.
+    Args:
+        context: The context object containing the state of the chessboard.
+        row (int): The row index of the square to check.
+        column (int): The column index of the square to check.
+    Returns:
+        bool: True if the square is not highlighted in yellow, green, or red; False otherwise.
+    """
+
+
     is_highlighted = False
     is_highlighted |= check_square_highlighted_in_yellow(context, row, column)
     is_highlighted |= check_square_highlighted_in_green(context, row, column)
@@ -29,6 +80,16 @@ def check_square_is_not_highlighted(context, row:int, column:int) -> bool:
     return not is_highlighted
     
 def get_positions_list_from_string(squares:str) -> list[tuple[int]]:
+    """
+    Converts a string representation of chessboard positions into a list of tuples.
+    Args:
+        squares (str): A string containing chessboard positions in the format 
+                        "(x1, y1), (x2, y2), ...]".
+    Returns:
+        list[tuple[int]]: A list of tuples where each tuple represents a position 
+                            on the chessboard as (x, y).
+    """
+
     squares = squares.replace('[', '').replace(']', '').replace('(', '').replace(')', '').replace(' ', '')
     positions = squares.split(',')
     return [(int(positions[i*2]), int(positions[i*2+1])) for i in range(len(positions)//2)]
