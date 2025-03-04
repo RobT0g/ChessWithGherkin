@@ -81,7 +81,7 @@ class BoardManager:
 
         if self.play_state == 'Promotion':
             print("Promoting pawn")
-            self.select_pawn_promotion()
+            self.select_pawn_promotion(mouse_pos)
             return
 
         if row < 0 or row >= self.board_length or col < 0 or col >= self.board_width:
@@ -141,19 +141,24 @@ class BoardManager:
     def check_game_finished(self) -> bool:
         return False
 
-    def select_pawn_promotion(self):
-        # Range on x: mid-175 to mid, mid to mid+175
-        # Range on y: mid-105 to mid+20, mid+20 to mid+145
-        x, y = pygame.mouse.get_pos()
+    def select_pawn_promotion(self, mouse_pos:tuple[int]):
+        # Range on x: mid-75 to mid, mid to mid+75
+        # Range on y: mid-75 to mid, mid to mid+75
+        x, y = mouse_pos
+        print(f"Clicked on x: {x}, y: {y}")
+        # print(f"Ranges are:")
+        # print(f"X: {self.screen_size[0]//2 - 75} to {self.screen_size[0]//2 + 75}")
+        # print(f"Y: {self.screen_size[1]//2 - 75} to {self.screen_size[1]//2 + 75}")
         
-        if x < self.screen_size[0]//2 - 175 or x > self.screen_size[0]//2 + 175:
+        if x < (self.screen_size[0]//2 - 75) or x > (self.screen_size[0]//2 + 75):
             return
         
-        if y < self.screen_size[1]//2 - 105 or y > self.screen_size[1]//2 + 145:
+        if y < (self.screen_size[1]//2 - 75) or y > (self.screen_size[1]//2 + 75):
             return
         
-        x = 0 if x < self.screen_size[0]//2 else 1
-        y = 0 if y < self.screen_size[1]//2 + 20 else 1
+        x = (x + 75 - self.screen_size[0]//2)//75
+        y = (y + 75 - self.screen_size[1]//2)//75
+        print(f"Promoted piece position: {x*2+y}")
         promoted_piece = self.promotion_options[x*2 + y]
 
         print(f"Promoted piece: {promoted_piece.get_icon_name()}")
@@ -243,13 +248,7 @@ class BoardManager:
             for i, piece in enumerate(self.promotion_options):
                 piece.load_icon()
                 icon = piece.get_icon()
-                piece_pos = [self.screen_size[0]//2, self.screen_size[1]//2 - 80 + (i//2)*100]
-                
-                if i % 2 == 0:
-                    piece_pos[0] -= 50 + icon.get_width()
-                
-                else:
-                    piece_pos[0] += 50
+                piece_pos = [self.screen_size[0]//2 - 75 + 75*(i//2), self.screen_size[1]//2 - 75 + 78*(i%2)]
 
                 self.display.blit(icon, piece_pos)
             pass
