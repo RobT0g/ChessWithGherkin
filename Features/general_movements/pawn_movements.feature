@@ -103,6 +103,6 @@ Feature: Testing pawn movements
             | row | column | attacking | att_row | att_col | attacked | green_squares  | red_squares |
             | 6   | 6      | White     | 5       | 5       | Black    | (5, 6), (4, 6) | (5, 5)      |
             | 6   | 6      | White     | 5       | 7       | Black    | (5, 6), (4, 6) | (5, 7)      |
-            | 6   | 6      | Black     | 7       | 5       | White    | (7, 6)         | (7, 5)      |
-            | 6   | 6      | Black     | 7       | 7       | White    | (7, 6)         | (7, 7)      |
+            | 3   | 6      | Black     | 4       | 5       | White    | (4, 6), (5, 6) | (4, 5)      |
+            | 3   | 6      | Black     | 4       | 7       | White    | (4, 6), (5, 6) | (4, 7)      |
         
