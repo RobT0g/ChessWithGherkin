@@ -68,7 +68,7 @@ def step_pawn_2_should_see_pawn_move_to_square(context, row_init, column_init, r
     assert not context.chess_board.highlighted_piece
     assert not context.chess_board.board[row_init][column_init]
     assert context.chess_board.board[row_to_move][column_to_move]
-    assert not context.chess_board.board[row_to_move][column_to_move].player
+    assert context.chess_board.board[row_to_move][column_to_move].player
 
 @then("'Pawn_Player_2' should see square {row} {column} no longer highlighted")
 def step_pawn_2_should_see_square_no_longer_highlighted(context, row, column):

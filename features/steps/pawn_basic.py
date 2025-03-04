@@ -13,7 +13,7 @@ def step_add_a_white_pawn_in_pos_6_6(context):
     context.chess_board.board[6][6] = Pawn(True)
     context.chess_board.board[6][6].x = 6
     context.chess_board.board[6][6].y = 6
-    print('Added a white pawn in position 6 6')
+    print('Added a white pawn in position 6 6: ', end='')
     print(context.chess_board.board[6][6])
 
 @given("'Pawn_Player' has clicked on the 'Pawn' in position '6' '6'")
@@ -68,7 +68,7 @@ def step_pawn_player_should_see_pawn_move_from_6_6_to_5_6(context):
     print('Checking if the pawn moved from 6 6 to 5 6')
     assert not context.chess_board.board[6][6]
     assert context.chess_board.board[5][6]
-    assert not context.chess_board.board[5][6].player
+    assert context.chess_board.board[5][6].player
 
 @then("'Pawn_Player' should see square '6' '6' no longer highlighted")
 def step_pawn_player_should_see_square_6_6_no_long_longer_highlighted(context):

@@ -1,0 +1,1 @@
+Feature: Testing Knight movements
