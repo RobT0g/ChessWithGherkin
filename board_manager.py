@@ -96,7 +96,7 @@ class BoardManager:
             if not self.check_pawn_promotion(moved_piece):
                 self.player_turn = not self.player_turn
                 self.highlighted_piece = None
-                
+
             self.highlighted_moves = []
             self.highlighted_attacks = []
             
@@ -152,7 +152,7 @@ class BoardManager:
             return
         
         x = 0 if x < self.screen_size[0]//2 else 1
-        y = 0 if y < self.screen_size[1]//2 + 20 else 2
+        y = 0 if y < self.screen_size[1]//2 + 20 else 1
         promoted_piece = self.promotion_options[x*2 + y]
         self.board[self.highlighted_piece.x][self.highlighted_piece.y] = promoted_piece
         promoted_piece.set_piece_position(self.highlighted_piece.x, self.highlighted_piece.y)
