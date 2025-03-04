@@ -191,7 +191,7 @@ def step_i_should_see_piece_move_to_square(context, piece_color, piece_type, row
     piece_color = piece_color.replace("'", '')
 
     print(f'Checking if the {piece_color} {piece_type} moved from {row_init} {column_init} to {row_to_move} {column_to_move}')
-    assert not context.chess_board.highlighted_piece
+    assert not context.chess_board.highlighted_piece or context.chess_board.play_state != 'Playing', 'Highlighted piece not removed'
     assert not context.chess_board.board[row_init][column_init]
     assert context.chess_board.board[row_to_move][column_to_move]
     check_piece_in_pos(context, row_to_move, column_to_move, piece_type, piece_color)
@@ -212,10 +212,13 @@ def step_check_piece_was_removed_from_square(context, piece_color, piece_type, r
     print(f'Checking if the {piece_color} {piece_type} was removed from {row} {column}')
     check_piece_in_pos(context, row, column, piece_type, piece_color, True)
 
-@then("I should get prompted with an option to choose which piece to promote the {piece_color} 'Pawn' to")
-def step_check_promotion_options(context, piece_color):
-    #time.sleep(10)
-    print(f'Checking if the {piece_color} pawn is prompted to promote')
+@then("I should get prompted with an option to choose which piece to promote the {piece_color} 'Pawn' on square {row} {column} to")
+def step_check_promotion_options(context, piece_color, row, column):
+    row, column = int(row.replace("'", '')), int(column.replace("'", ''))
+    piece_color = piece_color.replace("'", '')
+    check_piece_in_pos(context, row, column, 'Pawn', piece_color)
+    
+    assert context.chess_board.highlighted_piece == context.chess_board.board[row][column], 'Highlighted piece not set correctly'
     assert context.chess_board.promotion_options, 'No promotion options available'
     assert context.chess_board.play_state == 'Promotion', f'Playstate not set to Promotion: {context.chess_board.playstate}'
     assert context.chess_board.player_turn == (piece_color == 'White'), f'Player turn not set correctly: {context.chess_board.player_turn}'

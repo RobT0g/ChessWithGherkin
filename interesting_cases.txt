@@ -1,0 +1,2 @@
+> When I added the pawn promotion, one of the pawm movements scenario failed because I was checking if after I move a Black Pawn to the row 7 it should be White turn, but it was not the case because Black still needed to pick the promotion
+> I was check if all the squares in the list were highlighted in green, but I noticed that I was not checking if any other were. Because of that some tests for the Knight movement were being approved by checking if a single square was green when it should be 8 or more
