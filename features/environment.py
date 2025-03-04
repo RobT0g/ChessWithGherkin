@@ -1,7 +1,7 @@
 from behave import *
 import time
 
-step_latency = 0#.05
+step_latency = 0.05
 def before_step(context, step):
     '''This function is called before each step is executed'''
     pass
