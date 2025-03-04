@@ -171,6 +171,15 @@ def step_i_get_prompted_with_promotion_options(context, piece_color, row, column
 def step_i_click_on_square_when(context, row, column):
     step_i_click_on_square(context, row, column)
 
+@when("I choose to promote the pawn to a {promotion_piece}")
+def step_i_choose_pawn_promotion(context, promotion_piece):
+    promotion_piece = promotion_piece.replace("'", '').index(['Queen', 'Rook', 'Bishop', 'Knight'])
+    row_to_click = (promotion_piece//2)*175 + context.chess_board.screen_size[0]//2 - 175 + 30
+    column_to_click = (promotion_piece%2)*125 + context.chess_board.screen_size[1]//2 - 105 + 30
+
+    context.chess_board.on_click((row_to_click, column_to_click), False)
+    print(f'Chose to promote the pawn to a {promotion_piece} by clicking on {row_to_click} {column_to_click}')
+
 @then("I shold see the {piece_color} {piece_type} move from the square {row_init} {column_init} to the square {row_to_move} {column_to_move}")
 def step_i_should_see_piece_move_to_square(context, piece_color, piece_type, row_init, column_init, row_to_move, column_to_move):
     row_init = int(row_init.replace("'", ''))
@@ -210,4 +219,12 @@ def step_check_promotion_options(context, piece_color):
     assert context.chess_board.play_state == 'Promotion', f'Playstate not set to Promotion: {context.chess_board.playstate}'
     assert context.chess_board.player_turn == (piece_color == 'White'), f'Player turn not set correctly: {context.chess_board.player_turn}'
     print(f'Promotion options: {context.chess_board.promotion_options}')
-    
+
+@then("I should see a {piece_color} {promotion_piece} on the square {row} {column}")
+def step_i_should_see_a_piece_on_square(context, piece_color, promotion_piece, row, column):
+    row, column = int(row.replace("'", '')), int(column.replace("'", ''))
+    promotion_piece = promotion_piece.replace("'", '')
+    piece_color = piece_color.replace("'", '')
+
+    print(f'Checking if the {piece_color} {promotion_piece} is on the square {row} {column}')
+    check_piece_in_pos(context, row, column, promotion_piece, piece_color)
