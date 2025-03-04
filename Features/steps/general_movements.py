@@ -203,10 +203,10 @@ def step_check_piece_was_removed_from_square(context, piece_color, piece_type, r
 
 @then("I should get prompted with an option to choose which piece to promote the {piece_color} 'Pawn' to")
 def step_check_promotion_options(context, piece_color):
-    time.sleep(10)
+    #time.sleep(10)
     print(f'Checking if the {piece_color} pawn is prompted to promote')
     assert context.chess_board.promotion_options, 'No promotion options available'
-    assert context.chess_board.playstate == 'Promotion', f'Playstate not set to Promotion: {context.chess_board.playstate}'
+    assert context.chess_board.play_state == 'Promotion', f'Playstate not set to Promotion: {context.chess_board.playstate}'
     assert context.chess_board.player_turn == (piece_color == 'White'), f'Player turn not set correctly: {context.chess_board.player_turn}'
     print(f'Promotion options: {context.chess_board.promotion_options}')
     

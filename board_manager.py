@@ -89,16 +89,17 @@ class BoardManager:
         if (row, col) in self.highlighted_moves or (row, col) in self.highlighted_attacks:
             moved_piece = self.highlighted_piece
             self.move_piece(self.highlighted_piece, row, col)
-            self.highlighted_piece = None
-            self.highlighted_moves = []
-            self.highlighted_attacks = []
-            if self.check_pawn_promotion(moved_piece):
-                return
             
             if self.check_game_finished():
                 return
             
-            self.player_turn = not self.player_turn
+            if not self.check_pawn_promotion(moved_piece):
+                self.player_turn = not self.player_turn
+                self.highlighted_piece = None
+                
+            self.highlighted_moves = []
+            self.highlighted_attacks = []
+            
             return
 
         if not self.board[row][col]:
@@ -140,7 +141,23 @@ class BoardManager:
         return False
 
     def select_pawn_promotion(self):
-        pass
+        # Range on x: mid-175 to mid, mid to mid+175
+        # Range on y: mid-105 to mid+20, mid+20 to mid+145
+        x, y = pygame.mouse.get_pos()
+        
+        if x < self.screen_size[0]//2 - 175 or x > self.screen_size[0]//2 + 175:
+            return
+        
+        if y < self.screen_size[1]//2 - 105 or y > self.screen_size[1]//2 + 145:
+            return
+        
+        x = 0 if x < self.screen_size[0]//2 else 1
+        y = 0 if y < self.screen_size[1]//2 + 20 else 2
+        promoted_piece = self.promotion_options[x*2 + y]
+        self.board[self.highlighted_piece.x][self.highlighted_piece.y] = promoted_piece
+        promoted_piece.set_piece_position(self.highlighted_piece.x, self.highlighted_piece.y)
+        self.play_state = 'Playing'
+        
 
     def move_piece(self, piece:Piece, row:int, col:int):
         self.board[piece.x][piece.y] = None
