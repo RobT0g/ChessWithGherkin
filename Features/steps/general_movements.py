@@ -3,11 +3,11 @@ from behave import *
 from pieces import *
 from board_manager import *
 
-def check_piece_in_pos(context, row:int, column:int, piece_name:str, piece_color:str):
+def check_piece_in_pos(context, row:int, column:int, piece_name:str, piece_color:str, check_not_there:bool=False):
     row, column = int(row), int(column)
-    assert context.chess_board.board[row][column], f'Piece not added: {context.chess_board.board[row][column]}'
-    assert context.chess_board.board[row][column].get_icon_name() == f'{piece_name}_{piece_color[0]}', f'Piece name not set: {context.chess_board.board[row][column].get_icon_name()} should be {piece_name}_{piece_color[0]}'
-    assert context.chess_board.board[row][column].player == (piece_color == 'White'), f'Piece color not set: {context.chess_board.board[row][column].player} should be {"White"  if piece_color else "Black"}'
+    assert context.chess_board.board[row][column] != check_not_there, f'Piece not added: {context.chess_board.board[row][column]}'
+    assert (context.chess_board.board[row][column].get_icon_name() == f'{piece_name}_{piece_color[0]}') != check_not_there, f'Piece name not set: {context.chess_board.board[row][column].get_icon_name()} should be {piece_name}_{piece_color[0]}'
+    assert (context.chess_board.board[row][column].player == (piece_color == 'White')) != check_not_there, f'Piece color not set: {context.chess_board.board[row][column].player} should be {"White"  if piece_color else "Black"}'
 
 def check_square_highlighted_in_yellow(context, row:int, column:int) -> bool:
     if not context.chess_board.highlighted_piece:
@@ -188,3 +188,13 @@ def step_pawn_2_should_see_square_no_longer_highlighted(context):
     assert not context.chess_board.highlighted_moves
     assert not context.chess_board.highlighted_attacks 
 
+@then("I shold see the {piece_color} {piece_type} removed from the square {row} {column}")
+def step_check_piece_was_removed_from_square(context, piece_color, piece_type, row, column):
+    row, column = int(row.replace("'", '')), int(column.replace("'", ''))
+    piece_type = piece_type.replace("'", '')
+    piece_color = piece_color.replace("'", '')
+
+    print(f'Checking if the {piece_color} {piece_type} was removed from {row} {column}')
+    check_piece_in_pos(context, row, column, piece_type, piece_color, True)
+
+    
