@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from pieces import *
+import re
 
 pygame.init()  
 
@@ -18,6 +19,8 @@ class BoardManager:
         
         self.generate_board()
         self.player_turn = True
+        self.play_state = 'Playing'
+        self.promotion_options = []
 
         self.highlighted_piece = None
         self.highlighted_moves = []
@@ -70,6 +73,10 @@ class BoardManager:
         return ((y - self.border_size) // (self.tile_size + 2), (x - self.border_size) // (self.tile_size + 2))
 
     def on_click(self, mouse_pos:tuple[int], convert_coord:bool=True):
+        if self.play_state == 'Promotion':
+            self.select_pawn_promotion()
+            return
+
         row, col = mouse_pos
         if convert_coord:
             row, col = self.convert_board_coords_to_list_coords(row, col)
@@ -80,10 +87,17 @@ class BoardManager:
             return
 
         if (row, col) in self.highlighted_moves or (row, col) in self.highlighted_attacks:
+            moved_piece = self.highlighted_piece
             self.move_piece(self.highlighted_piece, row, col)
             self.highlighted_piece = None
             self.highlighted_moves = []
             self.highlighted_attacks = []
+            if self.check_pawn_promotion(moved_piece):
+                return
+            
+            if self.check_game_finished():
+                return
+            
             self.player_turn = not self.player_turn
             return
 
@@ -107,6 +121,26 @@ class BoardManager:
 
         else:
             self.define_possible_stream_moves(self.highlighted_piece)
+
+    def check_pawn_promotion(self, piece:Piece) -> bool:
+        if not re.match(r'^Pawn', piece.get_icon_name()):
+            return False
+        
+        if piece.player and piece.x != 0:
+            return False
+        
+        if not piece.player and piece.x != 7:
+            return False
+        
+        self.promotion_options = [Queen(piece.player), Rook(piece.player), Bishop(piece.player), Knight(piece.player)]
+        self.play_state = 'Promotion'
+        return True
+
+    def check_game_finished(self) -> bool:
+        return False
+
+    def select_pawn_promotion(self):
+        pass
 
     def move_piece(self, piece:Piece, row:int, col:int):
         self.board[piece.x][piece.y] = None
