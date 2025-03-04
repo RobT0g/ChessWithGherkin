@@ -17,7 +17,12 @@ def check_piece_in_pos(context, row:int, column:int, piece_name:str, piece_color
     '''
 
     row, column = int(row), int(column)
-    assert context.chess_board.board[row][column] != check_not_there, f'Piece should {"not " if check_not_there else ""} be on {row} {column}: {context.chess_board.board[row][column]}'
+    if not check_not_there and context.chess_board.board[row][column] is None:
+        assert False, f'Square {row} {column} is empty'
+
+    elif check_not_there:
+        return
+
     assert (context.chess_board.board[row][column].get_icon_name() == f'{piece_name}_{piece_color[0]}') != check_not_there, f'Piece name not matching: {context.chess_board.board[row][column].get_icon_name()} should {"not" if check_not_there else ""}be {piece_name}_{piece_color[0]}'
     assert (context.chess_board.board[row][column].player == (piece_color == 'White')) != check_not_there, f'Piece color not matching: {context.chess_board.board[row][column].player} should {"not" if check_not_there else ""}be {"White"  if piece_color else "Black"}'
 

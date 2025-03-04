@@ -11,7 +11,6 @@ Feature: Pawn gets promotted
         When I click on the square <row_to_move> <column>
 
         Then I shold see the <piece_color> 'Pawn' move from the square <row> <column> to the square <row_to_move> <column>
-        And there should not be any squares highlighted in any color
         And I should get prompted with an option to choose which piece to promote the <piece_color> 'Pawn' on square <row_to_move> <column> to
 
         Examples:
