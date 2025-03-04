@@ -126,8 +126,7 @@ def step_i_see_squares_highlighted_in_color(context, squares, highlight_color):
 
     for l in range(context.chess_board.board_length):
         for w in range(context.chess_board.board_width):
-            assert highlight_function(context, l, w) == ((l, w) in squares), ...
-            f'Square {l} {w} {"" if highlight_function(context, l, w) else "not"} highlighted in {highlight_color}'
+            assert highlight_function(context, l, w) == ((l, w) in squares), f'Square {l} {w} {"" if highlight_function(context, l, w) else "not "}highlighted in {highlight_color}'
 
 @given("the {piece_color} {piece_type} in position {row} {column} has already moved")
 def step_set_piece_as_already_moved(context, piece_color, piece_type, row, column):
