@@ -142,13 +142,11 @@ class BoardManager:
         return False
 
     def select_pawn_promotion(self, mouse_pos:tuple[int]):
-        # Range on x: mid-75 to mid, mid to mid+75
-        # Range on y: mid-75 to mid, mid to mid+75
         x, y = mouse_pos
         print(f"Clicked on x: {x}, y: {y}")
-        # print(f"Ranges are:")
-        # print(f"X: {self.screen_size[0]//2 - 75} to {self.screen_size[0]//2 + 75}")
-        # print(f"Y: {self.screen_size[1]//2 - 75} to {self.screen_size[1]//2 + 75}")
+        print(f"Ranges are:")
+        print(f"X: {self.screen_size[0]//2 - 75} to {self.screen_size[0]//2 + 75}")
+        print(f"Y: {self.screen_size[1]//2 - 75} to {self.screen_size[1]//2 + 75}")
         
         if x < (self.screen_size[0]//2 - 75) or x > (self.screen_size[0]//2 + 75):
             return
@@ -158,14 +156,20 @@ class BoardManager:
         
         x = (x + 75 - self.screen_size[0]//2)//75
         y = (y + 75 - self.screen_size[1]//2)//75
-        print(f"Promoted piece position: {x*2+y}")
         promoted_piece = self.promotion_options[x*2 + y]
-
+        
+        print(f"Promoted piece position: {x*2+y}")
         print(f"Promoted piece: {promoted_piece.get_icon_name()}")
 
         self.board[self.highlighted_piece.x][self.highlighted_piece.y] = promoted_piece
         promoted_piece.set_piece_position(self.highlighted_piece.x, self.highlighted_piece.y)
+        
         self.play_state = 'Playing'
+        self.highlighted_piece = None
+        self.highlighted_moves = []
+        self.highlighted_attacks = []
+        self.promotion_options = []
+        self.player_turn = not self.player_turn
 
     def move_piece(self, piece:Piece, row:int, col:int):
         self.board[piece.x][piece.y] = None
