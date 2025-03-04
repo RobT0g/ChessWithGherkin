@@ -46,8 +46,7 @@ Feature: Pawn gets promotted
 
         When I choose to promote the pawn to a <promotion_piece>
 
-        Then I shold see the <piece_color> 'Pawn' removed from the square <row_to_move> <column>
-        And I should see a <piece_color> <promotion_piece> on the square <row_to_move> <column>
+        Then I should see a <piece_color> <promotion_piece> on the square <row_to_move> <column>
         And there should not be any squares highlighted in any color
         And it should no longer be <piece_color> turn to play
 

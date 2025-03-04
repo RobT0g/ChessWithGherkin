@@ -73,15 +73,16 @@ class BoardManager:
         return ((y - self.border_size) // (self.tile_size + 2), (x - self.border_size) // (self.tile_size + 2))
 
     def on_click(self, mouse_pos:tuple[int], convert_coord:bool=True):
-        if self.play_state == 'Promotion':
-            self.select_pawn_promotion()
-            return
-
         row, col = mouse_pos
         if convert_coord:
             row, col = self.convert_board_coords_to_list_coords(row, col)
 
         print(f"Clicked on row: {row}, col: {col}")
+
+        if self.play_state == 'Promotion':
+            print("Promoting pawn")
+            self.select_pawn_promotion()
+            return
 
         if row < 0 or row >= self.board_length or col < 0 or col >= self.board_width:
             return
@@ -154,10 +155,12 @@ class BoardManager:
         x = 0 if x < self.screen_size[0]//2 else 1
         y = 0 if y < self.screen_size[1]//2 + 20 else 1
         promoted_piece = self.promotion_options[x*2 + y]
+
+        print(f"Promoted piece: {promoted_piece.get_icon_name()}")
+
         self.board[self.highlighted_piece.x][self.highlighted_piece.y] = promoted_piece
         promoted_piece.set_piece_position(self.highlighted_piece.x, self.highlighted_piece.y)
         self.play_state = 'Playing'
-        
 
     def move_piece(self, piece:Piece, row:int, col:int):
         self.board[piece.x][piece.y] = None

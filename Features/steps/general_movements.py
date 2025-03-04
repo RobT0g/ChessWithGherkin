@@ -173,12 +173,13 @@ def step_i_click_on_square_when(context, row, column):
 
 @when("I choose to promote the pawn to a {promotion_piece}")
 def step_i_choose_pawn_promotion(context, promotion_piece):
-    promotion_piece = promotion_piece.replace("'", '').index(['Queen', 'Rook', 'Bishop', 'Knight'])
+    promotion_options = ['Queen', 'Rook', 'Bishop', 'Knight']
+    promotion_piece = promotion_options.index(promotion_piece.replace("'", ''))
     row_to_click = (promotion_piece//2)*175 + context.chess_board.screen_size[0]//2 - 175 + 30
     column_to_click = (promotion_piece%2)*125 + context.chess_board.screen_size[1]//2 - 105 + 30
 
     context.chess_board.on_click((row_to_click, column_to_click), False)
-    print(f'Chose to promote the pawn to a {promotion_piece} by clicking on {row_to_click} {column_to_click}')
+    print(f'Chose to promote the pawn to a {promotion_options[promotion_piece]} by clicking on {row_to_click} {column_to_click}')
 
 @then("I shold see the {piece_color} {piece_type} move from the square {row_init} {column_init} to the square {row_to_move} {column_to_move}")
 def step_i_should_see_piece_move_to_square(context, piece_color, piece_type, row_init, column_init, row_to_move, column_to_move):
