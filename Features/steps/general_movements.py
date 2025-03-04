@@ -228,3 +228,8 @@ def step_i_should_see_a_piece_on_square(context, piece_color, promotion_piece, r
 
     print(f'Checking if the {piece_color} {promotion_piece} is on the square {row} {column}')
     check_piece_in_pos(context, row, column, promotion_piece, piece_color)
+
+@then("it should no longer be {piece_color} turn to play")
+def step_check_player_turn(context, piece_color):
+    print(f'Checking if it is still {piece_color} turn to play')
+    assert context.chess_board.player_turn != (piece_color == 'White'), f'Player turn not set correctly: {context.chess_board.player_turn}'
