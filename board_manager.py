@@ -171,6 +171,11 @@ class BoardManager:
         self.promotion_options = []
         self.player_turn = not self.player_turn
 
+    def add_piece(self, piece:Piece, row:int, col:int):
+        self.board[row][col] = piece
+        self.board[row][col].x = row
+        self.board[row][col].y = col
+
     def move_piece(self, piece:Piece, row:int, col:int):
         self.board[piece.x][piece.y] = None
         self.board[row][col] = piece
